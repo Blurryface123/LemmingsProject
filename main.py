@@ -32,6 +32,9 @@ pyxel.run(update, draw)"""
 import pyxel
 import random
 
+from classes.platform import Platform
+
+
 class App:
     def __init__(self):
         pyxel.init(256, 256)
@@ -55,53 +58,58 @@ class App:
         #self.grid[0][1] = 0
         #self.grid[1][1] = 0
 
-        pl = self.platform()
-        self.door(pl)
+        pl = Platform(self.grid)
+        pl.create()
+        print(pl.x_start)
+        self.door(pl.x_start,pl.x_end,pl.y, pl.n)
         #El run tiene que ir despues para coger los cambios del grid
         pyxel.run(self.update, self.draw)
 
     #CREAR HUECO ALEATORIA
     #plataformas tienen valor 2
-    def platform(self):
-        count = 0
-        x_index = []
-        y_index = []
-        platforms_sizes = []
-        while count <7:
-            # 14 espacios libres (contando paredes) y max blockques de 11
-            j = random.randint(1, 14)
-            platform_size = random.randint(5, 11)
-            i = random.randint(1, 14-platform_size)
+    # def platform(self):
+    #     count = 0
+    #     x_index = []
+    #     y_index = []
+    #     platforms_sizes = []
+    #     while count <7:
+    #         # 14 espacios libres (contando paredes) y max blockques de 11
+    #         j = random.randint(1, 14)
+    #         platform_size = random.randint(5, 11)
+    #         i = random.randint(1, 14-platform_size)
+    #
+    #         #to avoid repeated places. The grid i j == 0 is to avoid blocking the entrace
+    #         if i not in x_index and j not in y_index and self.grid[i][j]==0:
+    #             x_index.append(i)
+    #             y_index.append(j)
+    #             platforms_sizes.append(platform_size)
+    #             count+=1
+    #             for x in range(16):
+    #                 #To place the platform. starts at i and ends at the i+random length
+    #                 if x >=i and x <=i+platform_size:
+    #                     self.grid[x][j] = 2
+    #
+    #
+    #     return list(zip(x_index,y_index,platforms_sizes))
 
-            #to avoid repeated places. The grid i j == 0 is to avoid blocking the entrace
-            if i not in x_index and j not in y_index and self.grid[i][j]==0:
-                x_index.append(i)
-                y_index.append(j)
-                platforms_sizes.append(platform_size)
-                count+=1
-                for x in range(16):
-                    #To place the platform. starts at i and ends at the i+random length
-                    if x >=i and x <=i+platform_size:
-                        self.grid[x][j] = 2
-
-
-        return list(zip(x_index,y_index,platforms_sizes))
-
-    def door(self, platforms):
+    def door(self, pl_start,pl_end, y,n_platforms):
         count = 0
         while count < 2:
             #random platform
-            platform_index = random.randint(0,len(platforms)-1)
+            platform_index = random.randint(0,n_platforms-1)#number platforms
+            print(platform_index)
             #accessing platform values
-            plat_values = platforms[platform_index]
-            print(plat_values)
-            pl_start = plat_values[0]
-            print(pl_start)
-            pl_end = plat_values[0]+plat_values[2]
-            print(pl_end)
-            door_coord_x = random.randint(pl_start,pl_end)
-            print("random x",door_coord_x)
-            door_coord_y = plat_values[1]
+            # plat_values = platforms[platform_index]
+            # print(plat_values)
+            # pl_start = plat_values[0]
+            # print(pl_start)
+            # pl_end = plat_values[0]+plat_values[2]
+            # print(pl_end)
+            # door_coord_x = random.randint(pl_start,pl_end)
+            # print("random x",door_coord_x)
+            # door_coord_y = plat_values[1]
+            door_coord_x = random.randint(pl_start[platform_index], pl_end[platform_index])
+            door_coord_y = y[platform_index]
             if self.grid[door_coord_x][door_coord_y-1] == 0:
                 self.grid[door_coord_x][door_coord_y-1] = 3
                 count+=1

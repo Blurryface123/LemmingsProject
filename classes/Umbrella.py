@@ -1,4 +1,4 @@
-class umbrella:
+class Umbrella:
     def __init__(selfself,x_umbrella,y_umbrella):
         self.x_umbrella = x_umbrella
         self.y_umbrella = y_umbrella

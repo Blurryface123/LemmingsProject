@@ -1,9 +1,8 @@
 def block(x, y,grid):
-    grid
     x, y = int(x), int(y)
-    if x < 256 and y < 256:
+    if x < 15 and y < 15 and x >= 0 and y >= 0:
         # limits
-        if grid[x // 16][y // 16] != 1:
+        if grid[x][y] == 0:
             return True
         else:
             return False
